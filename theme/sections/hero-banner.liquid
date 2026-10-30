@@ -1,0 +1,82 @@
+{% comment %}
+  KITETZU · White Dojo Hero — 鬼徹
+{% endcomment %}
+{%- liquid
+  assign overlay_alpha = section.settings.overlay_opacity | divided_by: 100.0
+  assign overlay_top = overlay_alpha | times: 0.92 | round: 2
+  assign overlay_mid = overlay_alpha | times: 0.45 | round: 2
+-%}
+<style>
+  @keyframes heroFadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes heroKanji { 0%,100% { opacity:.9; transform:translateY(0); } 50% { opacity:.55; transform:translateY(-14px); } }
+  @keyframes heroSlash { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+  .hero-dojo { position:relative; min-height:{{ section.settings.min_height }}svh; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; background:var(--k-ink,#ffffff); }
+  .hero-dojo__img-layer { position:absolute; inset:0; }
+  .hero-dojo__img-layer img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+  .hero-dojo__overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(255,255,255,{{ overlay_top }}) 0%, rgba(255,255,255,{{ overlay_mid }}) 45%, rgba(255,255,255,0.15) 100%); }
+  .hero-dojo__kanji { position:absolute; top:6%; right:2%; z-index:1; display:flex; flex-direction:column; font-size:clamp(150px,26vw,380px); animation:heroKanji 9s ease-in-out infinite; }
+  .hero-dojo__content { position:relative; z-index:2; padding:40px 24px 30px; max-width:1440px; margin:0 auto; width:100%; animation:heroFadeUp .9s ease both .1s; }
+  .hero-dojo__heading { font-family:var(--k-font-display); font-size:clamp(84px,22vw,210px); line-height:.86; letter-spacing:.015em; color:var(--k-bone); margin:14px 0 0; text-wrap:balance; }
+  .hero-dojo__ghostline { font-family:var(--k-font-display); font-size:clamp(46px,11vw,120px); line-height:.92; letter-spacing:.03em; color:transparent; -webkit-text-stroke:1.5px rgba(20,20,22,.4); margin:6px 0 34px; }
+  .hero-dojo__ctas { display:flex; gap:18px; align-items:center; flex-wrap:wrap; animation:heroFadeUp .9s ease both .35s; }
+  .hero-dojo__vertical { position:absolute; right:22px; bottom:120px; z-index:2; display:none; }
+  .hero-dojo__meta { position:relative; z-index:2; border-top:1px solid var(--k-line); margin-top:34px; }
+  .hero-dojo__meta-inner { max-width:1440px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--k-bone-35); }
+  .hero-dojo__meta-inner .dot { width:4px; height:4px; background:var(--k-red); transform:rotate(45deg); flex-shrink:0; }
+  .hero-dojo__slashline { position:absolute; top:0; left:0; right:0; height:2px; z-index:3; background:linear-gradient(90deg, var(--k-red), transparent 60%); transform-origin:left; animation:heroSlash 1.2s cubic-bezier(.19,1,.22,1) both .2s; }
+  @media (min-width:900px) { .hero-dojo__vertical { display:block; } }
+  @media (max-width:767px) { .hero-dojo__img-layer .desktop-img { display:none; } .hero-dojo__kanji { right:-4%; top:4%; } }
+  @media (min-width:768px) { .hero-dojo__img-layer .mobile-img { display:none; } }
+  @media (prefers-reduced-motion:reduce) { .hero-dojo__kanji, .hero-dojo__content, .hero-dojo__ctas, .hero-dojo__slashline { animation:none; } }
+</style>
+<section class="hero-dojo">
+  <div class="hero-dojo__slashline" aria-hidden="true"></div>
+  <div class="hero-dojo__img-layer">
+    {%- if section.settings.image != blank -%}{{ section.settings.image | image_url: width: 1440 | image_tag: loading: 'eager', fetchpriority: 'high', class: 'desktop-img', alt: section.settings.heading_line_1, widths: '750, 1100, 1440', sizes: '100vw' }}{%- endif -%}
+    {%- if section.settings.mobile_image != blank -%}{{ section.settings.mobile_image | image_url: width: 750 | image_tag: loading: 'eager', fetchpriority: 'high', class: 'mobile-img', alt: section.settings.heading_line_1, widths: '375, 750', sizes: '100vw' }}{%- elsif section.settings.image != blank -%}{{ section.settings.image | image_url: width: 750 | image_tag: loading: 'eager', fetchpriority: 'high', class: 'mobile-img', alt: section.settings.heading_line_1, widths: '375, 750', sizes: '100vw' }}{%- endif -%}
+    <div class="hero-dojo__overlay"></div>
+  </div>
+  {%- if section.settings.kanji != blank -%}
+    <div class="hero-dojo__kanji k-kanji-ghost" aria-hidden="true">{%- assign kanji_chars = section.settings.kanji | split: '' -%}{%- for char in kanji_chars -%}<span>{{ char }}</span>{%- endfor -%}</div>
+  {%- endif -%}
+  {%- if section.settings.vertical_text != blank -%}<div class="hero-dojo__vertical k-vertical" aria-hidden="true">{{ section.settings.vertical_text }}</div>{%- endif -%}
+  <div class="hero-dojo__content">
+    {%- if section.settings.eyebrow != blank -%}<p class="k-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    {%- if section.settings.heading_line_1 != blank -%}<h1 class="hero-dojo__heading">{{ section.settings.heading_line_1 }}</h1>{%- endif -%}
+    {%- if section.settings.heading_line_2 != blank -%}<p class="hero-dojo__ghostline">{{ section.settings.heading_line_2 }}</p>{%- endif -%}
+    <div class="hero-dojo__ctas">
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}<a href="{{ section.settings.cta_url }}" class="k-btn k-btn--red">{{ section.settings.cta_label }}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>{%- endif -%}
+      {%- if section.settings.cta_secondary_label != blank and section.settings.cta_secondary_url != blank -%}<a href="{{ section.settings.cta_secondary_url }}" class="k-link">{{ section.settings.cta_secondary_label }}</a>{%- endif -%}
+    </div>
+  </div>
+  {%- if section.settings.meta_text != blank -%}
+    <div class="hero-dojo__meta">
+      <div class="hero-dojo__meta-inner">
+        {%- assign meta_items = section.settings.meta_text | split: '·' -%}
+        {%- for item in meta_items -%}<span>{{ item | strip }}</span>{%- unless forloop.last -%}<span class="dot" aria-hidden="true"></span>{%- endunless -%}{%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Desktop image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "Drop 0 — Live" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "KITETZU" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading line 2 (outline)", "default": "AUS TINTE GESCHMIEDET." },
+    { "type": "text", "id": "kanji", "label": "Ghost-Kanji", "default": "鬼徹", "info": "Großes Kanji-Wasserzeichen rechts" },
+    { "type": "text", "id": "vertical_text", "label": "Vertikaler Text (japanisch)", "default": "限定・百着" },
+    { "type": "text", "id": "meta_text", "label": "Meta-Zeile (mit · trennen)", "default": "100 Stück · Kein Restock · Reflektierende Prints · 280 GSM" },
+    { "type": "text", "id": "cta_label", "label": "Primary CTA label", "default": "Drop 0 ansehen" },
+    { "type": "url", "id": "cta_url", "label": "Primary CTA URL" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary CTA label", "default": "Alles entdecken" },
+    { "type": "url", "id": "cta_secondary_url", "label": "Secondary CTA URL" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 80, "step": 5, "default": 70, "unit": "%" },
+    { "type": "range", "id": "min_height", "label": "Min height (svh)", "min": 40, "max": 100, "step": 5, "default": 95 }
+  ],
+  "presets": [{ "name": "Hero Banner" }]
+}
+{% endschema %}

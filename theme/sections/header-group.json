@@ -1,0 +1,114 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "header_announcements_9jGBFp": {
+      "type": "header-announcements",
+      "blocks": {
+        "announcement_BxgCk9": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Kostenloser Versand ab 80 €",
+            "link": "",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.875rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "uppercase",
+            "text_color": "#141416"
+          },
+          "blocks": {}
+        },
+        "announcement_drop0": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Drop 0 live · Limitiert · Kein Restock",
+            "link": "shopify://collections/windbreaker",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.875rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "uppercase",
+            "text_color": "#e63322"
+          },
+          "blocks": {}
+        },
+        "announcement_retoure": {
+          "type": "_announcement",
+          "settings": {
+            "text": "14 Tage Rückgaberecht",
+            "link": "",
+            "font": "var(--font-heading--family)",
+            "font_size": "0.875rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "uppercase",
+            "text_color": "#141416"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "announcement_BxgCk9",
+        "announcement_drop0",
+        "announcement_retoure"
+      ],
+      "custom_css": [
+        "announcement-bar-component {grid-column: 1 / -1; width: 100%;}",
+        ".announcement-bar__slides {margin-inline: auto;}",
+        ".announcement-bar__text {text-align: center; letter-spacing: 0.14em;}"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "speed": 3,
+        "section_width": "full-width",
+        "background_color": "#f4f4f5",
+        "divider_width": 0,
+        "divider_color": "{{ settings.color_palette.color2 }}",
+        "padding-block-start": 10,
+        "padding-block-end": 10
+      }
+    },
+    "header_section": {
+      "type": "header",
+      "blocks": {
+        "nav_link_eyMPNE": {
+          "type": "nav_link",
+          "settings": {
+            "label": "DROP 0 — WINDBREAKER",
+            "url": "shopify://collections/windbreaker"
+          }
+        },
+        "nav_link_GywFKd": {
+          "type": "nav_link",
+          "settings": {
+            "label": "T-SHIRTS",
+            "url": "shopify://collections/t-shirts"
+          }
+        }
+      },
+      "block_order": [
+        "nav_link_eyMPNE",
+        "nav_link_GywFKd"
+      ],
+      "settings": {
+        "logo_image": "shopify://shop_images/Kitetsu_Logo_black_e5ca8fd0-359a-49cf-8825-4d255cb8ddc8.png",
+        "logo_max_width": 60,
+        "sticky_header": true
+      }
+    }
+  },
+  "order": [
+    "header_announcements_9jGBFp",
+    "header_section"
+  ]
+}

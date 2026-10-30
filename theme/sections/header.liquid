@@ -1,0 +1,71 @@
+{% comment %}
+  Section 2 · Navigation & Warenkorb
+{% endcomment %}
+
+<style>
+  .site-header { position: {% if section.settings.sticky_header %}sticky{% else %}relative{% endif %}; top: 0; z-index: 100; background: rgba(247,246,243,0.96); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(13,13,13,0.08); }
+  .site-header__inner { max-width: 1440px; margin: 0 auto; padding: 0 20px; height: 54px; display: flex; align-items: center; justify-content: space-between; gap: 12px; position: relative; }
+  .site-header__menu-btn { background: none; border: none; cursor: pointer; color: #0d0d0d; display: flex; flex-direction: column; gap: 5px; padding: 6px 4px; flex-shrink: 0; }
+  .site-header__menu-btn span { display: block; height: 1.5px; background: currentColor; }
+  .site-header__logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.1em; color: #0d0d0d; position: absolute; left: 50%; transform: translateX(-50%); }
+  .site-header__logo img { display: block; max-width: {{ section.settings.logo_max_width }}px; height: auto; }
+  .site-header__icons { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+  .site-header__icon-btn { background: none; border: none; cursor: pointer; color: #0d0d0d; line-height: 0; padding: 4px; }
+  .site-header__icon-link { line-height: 0; color: #0d0d0d; padding: 4px; position: relative; }
+  .site-header__cart-count { position: absolute; top: -5px; right: -5px; background: oklch(0.62 0.27 350); color: #fff; font-size: 8.5px; font-weight: 600; width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; }
+</style>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <button class="site-header__menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="main-nav">
+      <span style="width:22px"></span><span style="width:22px"></span><span style="width:14px"></span>
+    </button>
+    <a href="{{ routes.root_url }}" class="site-header__logo">
+      {%- if section.settings.logo_image != blank -%}
+        {{ section.settings.logo_image | image_url: width: 300 | image_tag: loading: 'eager', alt: shop.name }}
+      {%- else -%}{{ shop.name }}{%- endif -%}
+    </a>
+    <div class="site-header__icons">
+      <button class="site-header__icon-btn" aria-label="Suche">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7.5"></circle><path d="M21 21l-4.5-4.5"></path></svg>
+      </button>
+      <a href="{{ routes.account_url }}" class="site-header__icon-link" aria-label="Konto">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </a>
+      <a href="{{ routes.cart_url }}" class="site-header__icon-link" aria-label="Warenkorb">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        {%- if cart.item_count > 0 -%}<span class="site-header__cart-count">{{ cart.item_count }}</span>{%- endif -%}
+      </a>
+    </div>
+  </div>
+  {%- if section.blocks.size > 0 -%}
+    <nav id="main-nav" aria-label="Hauptnavigation" style="display:none">
+      <ul style="list-style:none;max-width:1440px;margin:0 auto;padding:0 20px 16px;display:flex;flex-direction:column;gap:4px">
+        {%- for block in section.blocks -%}{%- if block.type == 'nav_link' -%}
+          <li {{ block.shopify_attributes }}><a href="{{ block.settings.url }}" style="font-size:14px;letter-spacing:0.08em;color:#0d0d0d;text-transform:uppercase;display:block;padding:8px 0;border-bottom:1px solid rgba(13,13,13,0.06)">{{ block.settings.label }}</a></li>
+        {%- endif -%}{%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+</header>
+<script>
+(function(){
+  var btn=document.querySelector('.site-header__menu-btn'),nav=document.getElementById('main-nav');
+  if(!btn||!nav)return;
+  btn.addEventListener('click',function(){var open=nav.style.display!=='none';nav.style.display=open?'none':'block';btn.setAttribute('aria-expanded',String(!open));});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "site-header-section",
+  "settings": [
+    { "type": "image_picker", "id": "logo_image", "label": "Logo image" },
+    { "type": "range", "id": "logo_max_width", "label": "Logo max width (px)", "min": 50, "max": 300, "step": 10, "default": 140 },
+    { "type": "checkbox", "id": "sticky_header", "label": "Sticky header", "default": true }
+  ],
+  "blocks": [{ "type": "nav_link", "name": "Navigation link", "settings": [ { "type": "text", "id": "label", "label": "Label", "default": "Shop" }, { "type": "url", "id": "url", "label": "URL" } ] }],
+  "presets": [{ "name": "Header", "blocks": [ { "type": "nav_link", "settings": { "label": "New Arrivals", "url": "/collections/new-arrivals" } }, { "type": "nav_link", "settings": { "label": "Women", "url": "/collections/women" } }, { "type": "nav_link", "settings": { "label": "Men", "url": "/collections/men" } }, { "type": "nav_link", "settings": { "label": "Accessories", "url": "/collections/accessories" } } ] }]
+}
+{% endschema %}

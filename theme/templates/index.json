@@ -1,0 +1,188 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_banner": {
+      "type": "hero-banner",
+      "settings": {
+        "image": "shopify://shop_images/DSC00123_Buegeln.jpg",
+        "eyebrow": "Drop 0 — Live",
+        "heading_line_1": "KITETZU.",
+        "heading_line_2": "ANIME FITS.",
+        "kanji": "",
+        "vertical_text": "",
+        "meta_text": "",
+        "cta_label": "Drop 0 ansehen",
+        "cta_url": "/collections/drop-0",
+        "cta_secondary_label": "Alles entdecken",
+        "cta_secondary_url": "/collections/all",
+        "overlay_opacity": 70,
+        "min_height": 95
+      }
+    },
+    "marquee_text": {
+      "type": "marquee-text",
+      "custom_css": [],
+      "settings": {
+        "text": "KITETZU ・ 鬼徹 ・ ANIME FITS ・ OVERSIZE ・ 280 GSM ・",
+        "speed_seconds": 32,
+        "bg_color": "#f4f4f5",
+        "text_color": "#141416"
+      }
+    },
+    "drop_zone": {
+      "type": "kitetzu-drop-zone",
+      "disabled": true,
+      "settings": {
+        "current_label": "DROP 0",
+        "current_title": "DROP 0 — WINDBREAKER",
+        "current_sub": "Onyx & Ghost. Reflektierende Panels. Limitiert auf 200 Stück — danach nie wieder.",
+        "collection": "windbreaker",
+        "stock_limit": 200,
+        "current_cta": "Zum Drop",
+        "next_label": "DROP 1",
+        "next_title": "DROP 1 — HOODIE",
+        "next_sub": "Die nächste Klinge wird geschmiedet. Sei bereit, bevor sie fällt.",
+        "next_date": "2026-12-14T20:00",
+        "next_cta": "Benachrichtigt werden",
+        "next_cta_url": ""
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "custom_css": [],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Neuester Drop",
+        "kanji": "新",
+        "collection": "whitebeard-pirate-windbreaker",
+        "products_to_show": 6,
+        "enable_quick_add": true,
+        "show_second_image": true
+      }
+    },
+    "collection_grid": {
+      "type": "collection-grid",
+      "blocks": {
+        "col_1": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "t-shirts",
+            "custom_label": "T-SHIRTS"
+          }
+        },
+        "col_2": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "windbreaker",
+            "custom_label": "DROP 0 · WINDBREAKER"
+          }
+        },
+        "col_3": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "696626315595",
+            "custom_label": "DROP 1 · HOODIE"
+          }
+        }
+      },
+      "block_order": [
+        "col_1",
+        "col_2",
+        "col_3"
+      ],
+      "settings": {
+        "eyebrow": "Kategorien",
+        "heading": "KITETZU 2026",
+        "show_product_count": false
+      }
+    },
+    "usp_bar": {
+      "type": "usp-bar",
+      "blocks": {
+        "usp_1": {
+          "type": "usp_block",
+          "settings": {
+            "icon": "truck",
+            "title": "Kostenloser Versand ab 80 €",
+            "text": "Innerhalb Deutschlands in 2–4 Werktagen bei dir."
+          }
+        },
+        "usp_2": {
+          "type": "usp_block",
+          "settings": {
+            "icon": "return",
+            "title": "14 Tage Rückgaberecht",
+            "text": "Passt nicht? Einfach und unkompliziert zurückschicken."
+          }
+        },
+        "usp_3": {
+          "type": "usp_block",
+          "settings": {
+            "icon": "lock",
+            "title": "Sichere Zahlung",
+            "text": "PayPal, Klarna, Kreditkarte, Apple Pay & mehr."
+          }
+        },
+        "usp_4": {
+          "type": "usp_block",
+          "settings": {
+            "icon": "sword",
+            "title": "Limitierte Drops",
+            "text": "Einmal weg, für immer weg. Drop 0: nur 200 Stück."
+          }
+        }
+      },
+      "block_order": [
+        "usp_1",
+        "usp_2",
+        "usp_3",
+        "usp_4"
+      ],
+      "settings": {
+        "bg_color": "#ffffff"
+      }
+    },
+    "editorial_banner": {
+      "type": "editorial-banner",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Die Legende",
+        "heading": "DIE VERFLUCHTE KLINGE.",
+        "body": "KITETZU ist nach einer verfluchten Klinge benannt: 鬼徹 — Kitetsu. Wer sie führt, trägt ihre Geschichte. Wir schmieden deutsche Streetwear aus Anime-DNA: schwere 280-GSM-Stoffe, reflektierende Prints, limitierte Drops. Für alle, die ihre Identität tragen — nicht verstecken.",
+        "vertical_text": "物語・キテツ",
+        "cta_label": "Unsere Geschichte",
+        "cta_url": "/pages/about-us",
+        "layout": "image-left"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "KITETZU CLAN",
+        "subheading": "Du erfährst von jedem Drop 24 Stunden vor allen anderen — plus 10% auf deine erste Bestellung.",
+        "placeholder": "E-Mail",
+        "button_label": "BEITRETEN",
+        "disclaimer": "Mit Absenden des Formulars akzeptierst Du unsere Datenschutzbestimmungen.",
+        "bg_color": "#f4f4f5"
+      }
+    }
+  },
+  "order": [
+    "hero_banner",
+    "marquee_text",
+    "drop_zone",
+    "featured_collection",
+    "collection_grid",
+    "usp_bar",
+    "editorial_banner",
+    "newsletter"
+  ]
+}
