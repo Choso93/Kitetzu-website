@@ -32,7 +32,7 @@
           "type": "_announcement",
           "settings": {
             "text": "Drop 0 live · Limitiert · Kein Restock",
-            "link": "shopify://collections/whitebeard-pirate-windbreaker",
+            "link": "shopify://collections/windbreaker",
             "font": "var(--font-heading--family)",
             "font_size": "0.875rem",
             "weight": "",
@@ -85,7 +85,7 @@
           "type": "nav_link",
           "settings": {
             "label": "DROP 0 — WINDBREAKER",
-            "url": "shopify://collections/whitebeard-pirate-windbreaker"
+            "url": "shopify://collections/windbreaker"
           }
         },
         "nav_link_GywFKd": {

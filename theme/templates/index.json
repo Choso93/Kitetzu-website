@@ -20,7 +20,7 @@
         "vertical_text": "",
         "meta_text": "",
         "cta_label": "Drop 0 ansehen",
-        "cta_url": "/collections/whitebeard-pirate-windbreaker",
+        "cta_url": "/collections/windbreaker",
         "cta_secondary_label": "Alles entdecken",
         "cta_secondary_url": "/collections/all",
         "overlay_opacity": 70,
@@ -44,7 +44,7 @@
         "current_label": "DROP 0",
         "current_title": "DROP 0 — WINDBREAKER",
         "current_sub": "Onyx & Ghost. Reflektierende Panels. Limitiert auf 200 Stück — danach nie wieder.",
-        "collection": "whitebeard-pirate-windbreaker",
+        "collection": "windbreaker",
         "stock_limit": 200,
         "current_cta": "Zum Drop",
         "next_label": "DROP 1",
@@ -62,7 +62,7 @@
         "eyebrow": "",
         "heading": "Neuester Drop",
         "kanji": "新",
-        "collection": "whitebeard-pirate-windbreaker",
+        "collection": "windbreaker",
         "products_to_show": 6,
         "enable_quick_add": true,
         "show_second_image": true
@@ -81,7 +81,7 @@
         "col_2": {
           "type": "collection_block",
           "settings": {
-            "collection": "whitebeard-pirate-windbreaker",
+            "collection": "windbreaker",
             "custom_label": "DROP 0 · WINDBREAKER"
           }
         },
