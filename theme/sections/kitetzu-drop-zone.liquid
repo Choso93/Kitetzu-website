@@ -1,0 +1,117 @@
+{% comment %}
+  KITETZU · Drop-Zone — Live-Stückzähler + Countdown
+{% endcomment %}
+{%- liquid
+  assign drop_col = section.settings.collection
+  assign stock_limit = section.settings.stock_limit | default: 100
+  assign remaining = 0
+  if drop_col != blank
+    for product in drop_col.products
+      for variant in product.variants
+        assign remaining = remaining | plus: variant.inventory_quantity
+      endfor
+    endfor
+  endif
+  if remaining > stock_limit
+    assign remaining = stock_limit
+  endif
+  assign sold = stock_limit | minus: remaining
+  assign sold_pct = sold | times: 100.0 | divided_by: stock_limit | round
+-%}
+<style>
+  @keyframes dropPulse { 0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(230,51,34,.5); } 50% { opacity:.6; box-shadow:0 0 0 6px rgba(230,51,34,0); } }
+  @keyframes stripeMove { from { background-position:0 0; } to { background-position:28px 0; } }
+  .drop-zone { background:var(--k-ink,#0a0a0b); padding:3px; display:grid; gap:3px; }
+  @media (min-width:900px) { .drop-zone { grid-template-columns:1fr 1fr; } }
+  .drop-panel { background:var(--k-ink-2,#101012); border:1px solid var(--k-line); padding:34px 28px 38px; position:relative; overflow:hidden; }
+  .drop-panel--clickable{transition:border-color .25s ease,background .25s ease;}
+  .drop-panel--clickable:hover{border-color:var(--k-red);background:var(--k-ink-3,#161619);}
+  .drop-panel__link{position:absolute;inset:0;z-index:1;}
+  .drop-panel__sys { display:flex; align-items:center; justify-content:space-between; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--k-bone-35); margin-bottom:30px; }
+  .drop-panel__live { display:inline-flex; align-items:center; gap:8px; color:var(--k-red); font-weight:700; }
+  .drop-panel__live::before { content:""; width:7px; height:7px; border-radius:50%; background:var(--k-red); animation:dropPulse 1.6s ease-in-out infinite; }
+  .drop-panel__title { font-family:var(--k-font-display); font-size:clamp(40px,8vw,64px); line-height:.92; letter-spacing:.02em; color:var(--k-bone); margin-bottom:8px; }
+  .drop-panel__sub { font-size:12px; color:var(--k-bone-55); letter-spacing:.04em; margin-bottom:28px; line-height:1.6; }
+  .drop-meter__nums { display:flex; align-items:baseline; gap:10px; margin-bottom:12px; }
+  .drop-meter__big { font-family:var(--k-font-display); font-size:clamp(44px,9vw,72px); line-height:1; color:var(--k-red); }
+  .drop-meter__of { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--k-bone-35); }
+  .drop-meter__bar { height:10px; background:var(--k-ink,#0a0a0b); border:1px solid var(--k-line); position:relative; margin-bottom:10px; }
+  .drop-meter__fill { position:absolute; inset:0; width:{{ sold_pct | at_least: 2 | at_most: 100 }}%; background:repeating-linear-gradient(-45deg, var(--k-red) 0 10px, var(--k-red-deep,#a31407) 10px 20px); background-size:28px 100%; animation:stripeMove 1.2s linear infinite; }
+  .drop-meter__label { display:flex; justify-content:space-between; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--k-bone-35); margin-bottom:30px; }
+  .drop-count { display:flex; gap:10px; margin-bottom:30px; }
+  .drop-count__box { flex:1; max-width:96px; background:var(--k-ink,#0a0a0b); border:1px solid var(--k-line); padding:14px 6px 10px; text-align:center; }
+  .drop-count__num { font-family:var(--k-font-display); font-size:clamp(28px,6vw,44px); line-height:1; color:var(--k-bone); display:block; }
+  .drop-count__unit { font-size:8.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--k-bone-35); display:block; margin-top:6px; }
+  .drop-panel__kanji { position:absolute; bottom:-24px; right:-6px; font-size:130px; }
+  @media (prefers-reduced-motion:reduce) { .drop-panel__live::before, .drop-meter__fill { animation:none; } }
+</style>
+<section class="drop-zone">
+  <div class="drop-panel drop-panel--clickable">
+    {%- if drop_col != blank -%}<a href="https://www.kitetzu.com/collections/windbreaker" class="drop-panel__link" aria-label="{{ section.settings.current_title }}"></a>{%- endif -%}
+    <div class="drop-panel__sys"><span>SYS / {{ section.settings.current_label | default: 'DROP 0' | escape }}</span><span class="drop-panel__live">Live</span></div>
+    <h2 class="drop-panel__title">{{ section.settings.current_title }}</h2>
+    <p class="drop-panel__sub">{{ section.settings.current_sub }}</p>
+    <div class="drop-meter">
+      <div class="drop-meter__nums"><span class="drop-meter__big">{{ remaining }}</span><span class="drop-meter__of">von {{ stock_limit }} Stück übrig</span></div>
+      <div class="drop-meter__bar"><div class="drop-meter__fill"></div></div>
+      <div class="drop-meter__label"><span>{{ sold_pct }}% vergeben</span><span>Kein Restock</span></div>
+    </div>
+    {%- if drop_col != blank -%}<a href="https://www.kitetzu.com/collections/windbreaker" class="k-btn k-btn--red" style="position:relative;z-index:2">{{ section.settings.current_cta | default: 'Zum Drop' }}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>{%- endif -%}
+    <div class="drop-panel__kanji k-kanji-ghost" aria-hidden="true">零</div>
+  </div>
+  <div class="drop-panel">
+    <div class="drop-panel__sys"><span>SYS / {{ section.settings.next_label | default: 'DROP 1' | escape }}</span><span>Gesperrt</span></div>
+    <h2 class="drop-panel__title">{{ section.settings.next_title }}</h2>
+    <p class="drop-panel__sub">{{ section.settings.next_sub }}</p>
+    <div class="drop-count" id="drop-count-{{ section.id }}" data-date="{{ section.settings.next_date | escape }}">
+      <div class="drop-count__box"><span class="drop-count__num" data-u="d">––</span><span class="drop-count__unit">Tage</span></div>
+      <div class="drop-count__box"><span class="drop-count__num" data-u="h">––</span><span class="drop-count__unit">Std</span></div>
+      <div class="drop-count__box"><span class="drop-count__num" data-u="m">––</span><span class="drop-count__unit">Min</span></div>
+      <div class="drop-count__box"><span class="drop-count__num" data-u="s">––</span><span class="drop-count__unit">Sek</span></div>
+    </div>
+    <a href="{{ section.settings.next_cta_url | default: '#newsletter' }}" class="k-btn-ghost">{{ section.settings.next_cta | default: 'Benachrichtigt werden' }}</a>
+    <div class="drop-panel__kanji k-kanji-ghost" aria-hidden="true">壱</div>
+  </div>
+</section>
+<script>
+(function(){
+  var wrap=document.getElementById('drop-count-{{ section.id }}');
+  if(!wrap)return;
+  var target=new Date(wrap.dataset.date).getTime();
+  if(isNaN(target))return;
+  var els={d:wrap.querySelector('[data-u=d]'),h:wrap.querySelector('[data-u=h]'),m:wrap.querySelector('[data-u=m]'),s:wrap.querySelector('[data-u=s]')};
+  function pad(n){return n<10?'0'+n:''+n;}
+  function tick(){
+    var diff=target-Date.now();
+    if(diff<=0){els.d.textContent='00';els.h.textContent='00';els.m.textContent='00';els.s.textContent='00';clearInterval(iv);return;}
+    els.d.textContent=pad(Math.floor(diff/864e5));
+    els.h.textContent=pad(Math.floor(diff%864e5/36e5));
+    els.m.textContent=pad(Math.floor(diff%36e5/6e4));
+    els.s.textContent=pad(Math.floor(diff%6e4/1e3));
+  }
+  tick();
+  var iv=setInterval(tick,1000);
+})();
+</script>
+{% schema %}
+{
+  "name": "KITETZU Drop-Zone",
+  "settings": [
+    { "type": "header", "content": "Aktueller Drop" },
+    { "type": "text", "id": "current_label", "label": "System-Label", "default": "DROP 0" },
+    { "type": "text", "id": "current_title", "label": "Titel", "default": "DROP 0 — WINDBREAKER" },
+    { "type": "text", "id": "current_sub", "label": "Unterzeile", "default": "Onyx & Ghost. Reflektierende Panels. Limitiert auf 100 Stück — danach nie wieder." },
+    { "type": "collection", "id": "collection", "label": "Drop-Collection" },
+    { "type": "range", "id": "stock_limit", "label": "Auflage (Stück)", "min": 10, "max": 500, "step": 10, "default": 100 },
+    { "type": "text", "id": "current_cta", "label": "CTA", "default": "Zum Drop" },
+    { "type": "header", "content": "Nächster Drop" },
+    { "type": "text", "id": "next_label", "label": "System-Label", "default": "DROP 1" },
+    { "type": "text", "id": "next_title", "label": "Titel", "default": "DROP 1 — TRIKOTS" },
+    { "type": "text", "id": "next_sub", "label": "Unterzeile", "default": "Die nächste Klinge wird geschmiedet. Sei bereit, bevor sie fällt." },
+    { "type": "text", "id": "next_date", "label": "Drop-Datum (JJJJ-MM-TTTHH:MM, z.B. 2026-09-01T18:00)", "default": "2026-09-01T18:00" },
+    { "type": "text", "id": "next_cta", "label": "CTA", "default": "Benachrichtigt werden" },
+    { "type": "url", "id": "next_cta_url", "label": "CTA URL (leer = Newsletter)" }
+  ],
+  "presets": [{ "name": "KITETZU Drop-Zone" }]
+}
+{% endschema %}
