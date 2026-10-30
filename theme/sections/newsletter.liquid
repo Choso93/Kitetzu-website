@@ -9,7 +9,7 @@
   .newsletter__form { display:flex; max-width:380px; margin:0 auto; }
   .newsletter__input { flex:1; background:var(--k-ink,#ffffff); border:1px solid rgba(20,20,22,.18); border-right:none; color:var(--k-bone); font-size:13px; padding:15px 16px; outline:none; font-family:var(--k-font-body); min-width:0; }
   .newsletter__input::placeholder { color:var(--k-bone-35); }
-  .newsletter__input:focus { border-color:var(--k-red); }
+  .newsletter__input:focus, .newsletter__input:focus-visible { outline:none; border-color:rgba(20,20,22,.18); }
   .newsletter__btn { background:transparent; color:var(--k-red); border:1px solid var(--k-red); padding:15px 22px; font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; white-space:nowrap; font-family:var(--k-font-body); flex-shrink:0; transition:background .2s,color .2s; }
   .newsletter__btn:hover { background:var(--k-red); color:#fff; }
   .newsletter__disclaimer { font-size:10px; color:var(--k-bone-35); margin-top:14px; letter-spacing:.04em; }
