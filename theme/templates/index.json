@@ -44,7 +44,7 @@
         "current_label": "DROP 0",
         "current_title": "DROP 0 — WINDBREAKER",
         "current_sub": "Onyx & Ghost. Reflektierende Panels. Limitiert auf 200 Stück — danach nie wieder.",
-        "collection": "windbreaker",
+        "collection": "whitebeard-pirate-windbreaker",
         "stock_limit": 200,
         "current_cta": "Zum Drop",
         "next_label": "DROP 1",
@@ -88,8 +88,9 @@
         "col_3": {
           "type": "collection_block",
           "settings": {
-            "collection": "696626315595",
-            "custom_label": "DROP 1 · HOODIE"
+            "custom_label": "DROP 1 · HOODIE",
+            "info": "Bald verfügbar – lass dich benachrichtigen",
+            "link": "/#newsletter"
           }
         }
       },
