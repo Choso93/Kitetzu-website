@@ -1,0 +1,55 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "drop-hero": {
+      "type": "windbreaker-hero",
+      "settings": {
+        "collection": "",
+        "eyebrow": "New Drop",
+        "heading": "WINDBREAKER",
+        "subheading": "Wind- und wasserabweisend. Oversized Fit.",
+        "show_meta": true,
+        "piece_label": "Teile",
+        "restock_label": "Limitiert",
+        "cta_label": "Drop voranmelden",
+        "cta_anchor": "#newsletter",
+        "overlay_opacity": 70
+      }
+    },
+    "drop-grid": {
+      "type": "windbreaker-grid",
+      "settings": {
+        "collection": "",
+        "eyebrow": "Alle Teile",
+        "heading": "Windbreaker",
+        "columns_desktop": 4,
+        "show_numbering": true,
+        "show_status": true
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Erster Zugang zum nächsten Drop.",
+        "subheading": "Abonniere unseren Newsletter und erhalte 10% Rabatt auf Deine erste Bestellung!",
+        "placeholder": "E-Mail",
+        "button_label": "ABSENDEN",
+        "disclaimer": "Mit Absenden des Formulars akzeptierst Du unsere Datenschutzbestimmungen.",
+        "bg_color": "#eaeaed"
+      }
+    }
+  },
+  "order": [
+    "drop-hero",
+    "drop-grid",
+    "newsletter"
+  ]
+}
