@@ -1,0 +1,94 @@
+{% doc %}
+  Renders page-level JSON-LD that complements the schema emitted by sections:
+  WebSite on the home page, BreadcrumbList on product and collection pages and
+  FAQPage on the FAQ page. The OnlineStore entity is rendered by the footer
+  section, which owns the brand's social links.
+
+  @example
+  {% render 'structured-data' %}
+{% enddoc %}
+
+{%- assign shop_root = shop.url | append: '/' -%}
+
+{%- if request.page_type == 'index' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": {{ shop_root | append: '#website' | json }},
+      "name": {{ shop.name | json }},
+      "url": {{ shop_root | json }},
+      "inLanguage": {{ request.locale.iso_code | json }},
+      "publisher": { "@id": {{ shop_root | append: '#organization' | json }} }
+    }
+  </script>
+{%- endif -%}
+
+{%- if request.page_type == 'product' or request.page_type == 'collection' -%}
+  {%- liquid
+    assign crumb_collection = collection
+    if request.page_type == 'product' and crumb_collection == blank
+      assign crumb_collection = product.collections.first
+    endif
+    assign crumb_position = 1
+  -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ shop.name | json }},
+          "item": {{ shop_root | json }}
+        }
+        {%- if crumb_collection != blank -%}
+          {%- assign crumb_position = crumb_position | plus: 1 -%},
+          {
+            "@type": "ListItem",
+            "position": {{ crumb_position }},
+            "name": {{ crumb_collection.title | json }},
+            "item": {{ shop.url | append: crumb_collection.url | json }}
+          }
+        {%- endif -%}
+        {%- if request.page_type == 'product' -%}
+          {%- assign crumb_position = crumb_position | plus: 1 -%},
+          {
+            "@type": "ListItem",
+            "position": {{ crumb_position }},
+            "name": {{ product.title | json }},
+            "item": {{ shop.url | append: product.url | json }}
+          }
+        {%- endif %}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{%- if request.page_type == 'page' and page.handle == 'faq' and page.content contains '<h3>' -%}
+  {%- assign faq_parts = page.content | split: '<h3>' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for part in faq_parts offset: 1 -%}
+          {%- liquid
+            assign qa = part | split: '</h3>'
+            assign question = qa.first | strip_html | replace: '&amp;', '&' | replace: '&nbsp;', ' ' | strip
+            assign answer = qa.last | split: '<h2>' | first | strip_html | replace: '&amp;', '&' | replace: '&nbsp;', ' ' | strip
+          -%}
+          {
+            "@type": "Question",
+            "name": {{ question | json }},
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": {{ answer | json }}
+            }
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}

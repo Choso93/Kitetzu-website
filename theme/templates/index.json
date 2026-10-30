@@ -20,7 +20,7 @@
         "vertical_text": "",
         "meta_text": "",
         "cta_label": "Drop 0 ansehen",
-        "cta_url": "/collections/drop-0",
+        "cta_url": "/collections/whitebeard-pirate-windbreaker",
         "cta_secondary_label": "Alles entdecken",
         "cta_secondary_url": "/collections/all",
         "overlay_opacity": 70,
@@ -81,7 +81,7 @@
         "col_2": {
           "type": "collection_block",
           "settings": {
-            "collection": "windbreaker",
+            "collection": "whitebeard-pirate-windbreaker",
             "custom_label": "DROP 0 · WINDBREAKER"
           }
         },

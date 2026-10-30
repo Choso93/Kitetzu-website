@@ -44,7 +44,10 @@
         "link_list_shop",
         "link_list_hilfe"
       ],
-      "settings": {}
+      "settings": {
+        "seo_logo": "shopify://shop_images/Kitetsu_Logo_black_e5ca8fd0-359a-49cf-8825-4d255cb8ddc8.png",
+        "return_days": 30
+      }
     },
     "footer_utilities_jLGE8U": {
       "type": "footer-utilities",

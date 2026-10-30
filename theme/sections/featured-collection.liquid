@@ -51,7 +51,8 @@
           {%- assign on_sale = false -%}{%- if product.compare_at_price > product.price -%}{%- assign on_sale = true -%}{%- endif -%}
           <div class="prod-card-k">
             <div class="prod-card-k__img-wrap">
-              {%- if product.featured_image != blank -%}{{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: product.title, class: 'prod-card-k__img-primary', widths: '300, 600', sizes: '(min-width:1100px) 25vw,(min-width:768px) 50vw,260px' }}{%- if section.settings.show_second_image and product.images[1] != blank -%}{{ product.images[1] | image_url: width: 600 | image_tag: loading: 'lazy', alt: product.title, class: 'prod-card-k__img-secondary', widths: '300, 600', sizes: '(min-width:1100px) 25vw,(min-width:768px) 50vw,260px' }}{%- endif -%}{%- endif -%}
+              {%- assign card_alt = product.featured_image.alt | default: product.title -%}
+              {%- if product.featured_image != blank -%}{{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: card_alt, class: 'prod-card-k__img-primary', widths: '300, 600', sizes: '(min-width:1100px) 25vw,(min-width:768px) 50vw,260px' }}{%- if section.settings.show_second_image and product.images[1] != blank -%}{{ product.images[1] | image_url: width: 600 | image_tag: loading: 'lazy', alt: '', class: 'prod-card-k__img-secondary', widths: '300, 600', sizes: '(min-width:1100px) 25vw,(min-width:768px) 50vw,260px' }}{%- endif -%}{%- endif -%}
               {%- if product.tags contains 'new' or forloop.first -%}<span class="prod-card-k__badge prod-card-k__badge--new">Neu</span>{%- elsif on_sale -%}<span class="prod-card-k__badge prod-card-k__badge--sale">Sale</span>{%- endif -%}
               {%- if section.settings.enable_quick_add -%}<a href="{{ product.url }}" class="qa-bar"><span>Ansehen</span></a>{%- endif -%}
             </div>

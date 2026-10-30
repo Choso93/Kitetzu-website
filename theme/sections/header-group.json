@@ -32,7 +32,7 @@
           "type": "_announcement",
           "settings": {
             "text": "Drop 0 live · Limitiert · Kein Restock",
-            "link": "shopify://collections/windbreaker",
+            "link": "shopify://collections/whitebeard-pirate-windbreaker",
             "font": "var(--font-heading--family)",
             "font_size": "0.875rem",
             "weight": "",
@@ -85,7 +85,7 @@
           "type": "nav_link",
           "settings": {
             "label": "DROP 0 — WINDBREAKER",
-            "url": "shopify://collections/windbreaker"
+            "url": "shopify://collections/whitebeard-pirate-windbreaker"
           }
         },
         "nav_link_GywFKd": {
@@ -94,11 +94,19 @@
             "label": "T-SHIRTS",
             "url": "shopify://collections/t-shirts"
           }
+        },
+        "nav_link_all": {
+          "type": "nav_link",
+          "settings": {
+            "label": "ALLE PRODUKTE",
+            "url": "/collections/all"
+          }
         }
       },
       "block_order": [
         "nav_link_eyMPNE",
-        "nav_link_GywFKd"
+        "nav_link_GywFKd",
+        "nav_link_all"
       ],
       "settings": {
         "logo_image": "shopify://shop_images/Kitetsu_Logo_black_e5ca8fd0-359a-49cf-8825-4d255cb8ddc8.png",

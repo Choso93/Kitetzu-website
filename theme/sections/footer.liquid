@@ -39,9 +39,72 @@
     </div>
   </div>
 </footer>
+{%- if request.page_type == 'index' -%}
+  {%- liquid
+    assign brand_block = section.blocks | where: 'type', 'brand_block' | first
+    assign instagram_url = brand_block.settings.instagram_url
+    assign tiktok_url = brand_block.settings.tiktok_url
+    assign returns_page = pages['versand-retouren']
+    assign return_country = shop.address.country_code | default: localization.country.iso_code
+  -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "OnlineStore",
+      "@id": {{ shop.url | append: '/#organization' | json }},
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | append: '/' | json }},
+      {%- if section.settings.seo_logo != blank %}
+        "logo": {{ section.settings.seo_logo | image_url: width: 600 | prepend: 'https:' | json }},
+      {%- endif %}
+      {%- if shop.description != blank %}
+        "description": {{ shop.description | json }},
+      {%- endif %}
+      {%- if instagram_url != blank or tiktok_url != blank %}
+        "sameAs": [
+          {%- if instagram_url != blank -%}{{ instagram_url | json }}{%- endif -%}
+          {%- if instagram_url != blank and tiktok_url != blank -%},{%- endif -%}
+          {%- if tiktok_url != blank -%}{{ tiktok_url | json }}{%- endif -%}
+        ],
+      {%- endif %}
+      {%- if section.settings.return_days > 0 %}
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": [
+            {%- for country in localization.available_countries -%}
+              {{ country.iso_code | json }}{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ],
+          {%- if return_country != blank %}
+            "returnPolicyCountry": {{ return_country | json }},
+          {%- endif %}
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": {{ section.settings.return_days }},
+          {%- if returns_page != empty %}
+            "merchantReturnLink": {{ shop.url | append: returns_page.url | json }},
+          {%- endif %}
+          "returnMethod": "https://schema.org/ReturnByMail"
+        },
+      {%- endif %}
+      "email": {{ shop.email | json }},
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": {{ shop.email | json }},
+        "availableLanguage": {{ request.locale.iso_code | json }}
+      }
+    }
+  </script>
+{%- endif -%}
 {% schema %}
 {
   "name": "Footer",
+  "settings": [
+    { "type": "header", "content": "Google & KI-Suche" },
+    { "type": "paragraph", "content": "Fließt als strukturierte Daten (Schema.org) in die Startseite ein. Social-Links kommen aus dem Brand-Block." },
+    { "type": "image_picker", "id": "seo_logo", "label": "Logo für Suchmaschinen", "info": "Dunkles Logo auf hellem Hintergrund, mindestens 112 × 112 px." },
+    { "type": "number", "id": "return_days", "label": "Rückgabefrist in Tagen", "info": "Muss mit deiner Rückgaberichtlinie übereinstimmen. Leer lassen, um keine Rückgabe-Daten auszugeben." }
+  ],
   "blocks": [
     { "type": "brand_block", "name": "Brand", "limit": 1, "settings": [ { "type": "textarea", "id": "tagline", "label": "Tagline", "default": "Anime fits. Aura farming.\nIn Deutschland gegründet. Weltweit getragen." }, { "type": "url", "id": "instagram_url", "label": "Instagram URL" }, { "type": "url", "id": "tiktok_url", "label": "TikTok URL" } ] },
     { "type": "link_list", "name": "Link list", "limit": 3, "settings": [ { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" }, { "type": "link_list", "id": "menu", "label": "Menu" } ] }
