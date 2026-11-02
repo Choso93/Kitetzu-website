@@ -11,7 +11,23 @@
   if hero_desktop.alt != blank
     assign hero_alt = hero_desktop.alt
   endif
+  assign hero_video = section.settings.video
+  assign hero_video_mobile = section.settings.mobile_video
+  assign hero_poster_video = hero_video | default: hero_video_mobile
+  assign hero_video_main = hero_video | default: hero_video_mobile
 -%}
+{%- capture hero_picture -%}
+  {%- if hero_desktop != blank -%}
+    <picture>
+      <source
+        media="(max-width: 767px)"
+        srcset="{{ hero_mobile | image_url: width: 375 }} 375w, {{ hero_mobile | image_url: width: 750 }} 750w"
+        sizes="100vw"
+      >
+      {{ hero_desktop | image_url: width: 1440 | image_tag: loading: 'eager', fetchpriority: 'high', alt: hero_alt, widths: '750, 1100, 1440', sizes: '100vw' }}
+    </picture>
+  {%- endif -%}
+{%- endcapture -%}
 <style>
   @keyframes heroFadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
   @keyframes heroKanji { 0%,100% { opacity:.9; transform:translateY(0); } 50% { opacity:.55; transform:translateY(-14px); } }
@@ -20,6 +36,20 @@
   .hero-dojo__img-layer { position:absolute; inset:0; }
   .hero-dojo__img-layer picture { display:block; width:100%; height:100%; }
   .hero-dojo__img-layer img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+  .hero-dojo__video { position:absolute; inset:0; display:block; }
+  .hero-dojo__video picture, .hero-dojo__video img, .hero-dojo__video video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .hero-dojo__video img { object-position:center top; }
+  .hero-dojo__video video { object-position:center; }
+  .hero-dojo__video video { opacity:0; transition:opacity .4s cubic-bezier(.16,1,.3,1); }
+  .hero-dojo__video[data-playing] video { opacity:1; }
+  .hero-dojo__video[data-static] video, .hero-dojo__video[data-static] .hero-dojo__video-toggle { display:none; }
+  .hero-dojo__video-toggle { position:absolute; right:20px; bottom:20px; z-index:3; width:44px; height:44px; padding:0; border-radius:50%; border:1px solid rgba(255,255,255,.35); background:rgba(20,20,22,.6); color:#ffffff; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform .12s cubic-bezier(.16,1,.3,1), background-color .15s cubic-bezier(.16,1,.3,1); }
+  .hero-dojo__video-toggle:hover { background:rgba(20,20,22,.8); }
+  .hero-dojo__video-toggle:active { transform:scale(.93); }
+  .hero-dojo__video-toggle .svg-wrapper { display:flex; width:14px; height:14px; }
+  .hero-dojo__video-toggle svg { width:100%; height:100%; }
+  .hero-dojo__video-toggle .hero-dojo__icon-play, .hero-dojo__video[data-paused] .hero-dojo__icon-pause { display:none; }
+  .hero-dojo__video[data-paused] .hero-dojo__icon-play { display:flex; }
   .hero-dojo__overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(255,255,255,{{ overlay_top }}) 0%, rgba(255,255,255,{{ overlay_mid }}) 45%, rgba(255,255,255,0.15) 100%); }
   .hero-dojo__kanji { position:absolute; top:6%; right:2%; z-index:1; display:flex; flex-direction:column; font-size:clamp(150px,26vw,380px); animation:heroKanji 9s ease-in-out infinite; }
   .hero-dojo__content { position:relative; z-index:2; padding:40px 24px 30px; max-width:1440px; margin:0 auto; width:100%; animation:heroFadeUp .9s ease both .1s; }
@@ -33,20 +63,46 @@
   .hero-dojo__slashline { position:absolute; top:0; left:0; right:0; height:2px; z-index:3; background:linear-gradient(90deg, var(--k-red), transparent 60%); transform-origin:left; animation:heroSlash 1.2s cubic-bezier(.19,1,.22,1) both .2s; }
   @media (min-width:900px) { .hero-dojo__vertical { display:block; } }
   @media (max-width:767px) { .hero-dojo__kanji { right:-4%; top:4%; } }
-  @media (prefers-reduced-motion:reduce) { .hero-dojo__kanji, .hero-dojo__content, .hero-dojo__ctas, .hero-dojo__slashline { animation:none; } }
+  @media (prefers-reduced-motion:reduce) { .hero-dojo__kanji, .hero-dojo__content, .hero-dojo__ctas, .hero-dojo__slashline { animation:none; } .hero-dojo__video video, .hero-dojo__video-toggle { display:none; } .hero-dojo__video-toggle:active { transform:none; } }
 </style>
 <section class="hero-dojo">
   <div class="hero-dojo__slashline" aria-hidden="true"></div>
   <div class="hero-dojo__img-layer">
-    {%- if hero_desktop != blank -%}
-      <picture>
-        <source
-          media="(max-width: 767px)"
-          srcset="{{ hero_mobile | image_url: width: 375 }} 375w, {{ hero_mobile | image_url: width: 750 }} 750w"
-          sizes="100vw"
-        >
-        {{ hero_desktop | image_url: width: 1440 | image_tag: loading: 'eager', fetchpriority: 'high', alt: hero_alt, widths: '750, 1100, 1440', sizes: '100vw' }}
-      </picture>
+    {%- if hero_poster_video != blank -%}
+      <kitetzu-hero-video
+        class="hero-dojo__video"
+        data-label-pause="{{ 'accessibility.pause_video' | t | escape }}"
+        data-label-play="{{ 'accessibility.play_video' | t | escape }}"
+      >
+        {%- if hero_picture != blank -%}
+          {{ hero_picture }}
+        {%- else -%}
+          {{ hero_poster_video.preview_image | image_url: width: 1920 | image_tag: loading: 'eager', fetchpriority: 'high', alt: '', widths: '750, 1100, 1440, 1920', sizes: '100vw' }}
+        {%- endif -%}
+        <video playsinline muted loop autoplay preload="none" aria-hidden="true" tabindex="-1">
+          {%- if hero_video != blank and hero_video_mobile != blank -%}
+            {%- for video in hero_video_mobile.sources -%}
+              <source data-src="{{ video.url }}" type="{{ video.mime_type }}" media="(max-width: 767px)">
+            {%- endfor -%}
+          {%- endif -%}
+          {%- for video in hero_video_main.sources -%}
+            {%- if video.format == 'm3u8' -%}
+              <source data-src="{{ video.url }}" type="{{ video.mime_type }}">
+            {%- endif -%}
+          {%- endfor -%}
+          {%- for video in hero_video_main.sources -%}
+            {%- if video.format == 'mp4' -%}
+              <source data-src="{{ video.url }}" type="{{ video.mime_type }}">
+            {%- endif -%}
+          {%- endfor -%}
+        </video>
+        <button type="button" class="hero-dojo__video-toggle" aria-label="{{ 'accessibility.pause_video' | t | escape }}">
+          <span class="svg-wrapper hero-dojo__icon-pause" aria-hidden="true">{{- 'icon-pause.svg' | inline_asset_content -}}</span>
+          <span class="svg-wrapper hero-dojo__icon-play" aria-hidden="true">{{- 'icon-play.svg' | inline_asset_content -}}</span>
+        </button>
+      </kitetzu-hero-video>
+    {%- else -%}
+      {{ hero_picture }}
     {%- endif -%}
     <div class="hero-dojo__overlay"></div>
   </div>
@@ -71,12 +127,65 @@
     </div>
   {%- endif -%}
 </section>
+{%- if hero_poster_video != blank -%}
+  <script>
+    if (!customElements.get('kitetzu-hero-video')) {
+      customElements.define('kitetzu-hero-video', class extends HTMLElement {
+        connectedCallback() {
+          this.video = this.querySelector('video');
+          this.toggleButton = this.querySelector('.hero-dojo__video-toggle');
+          if (!this.video) return;
+          const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const saveData = navigator.connection && navigator.connection.saveData;
+          if (reducedMotion || saveData) {
+            this.setAttribute('data-static', '');
+            return;
+          }
+          this.onPlaying = () => this.setAttribute('data-playing', '');
+          this.onToggle = () => this.toggle();
+          this.video.addEventListener('playing', this.onPlaying);
+          if (this.toggleButton) this.toggleButton.addEventListener('click', this.onToggle);
+          for (const source of this.video.querySelectorAll('source[data-src]')) {
+            source.src = source.dataset.src;
+          }
+          this.video.load();
+          const playback = this.video.play();
+          if (playback) playback.catch(() => this.markPaused(true));
+        }
+
+        disconnectedCallback() {
+          if (this.video && this.onPlaying) this.video.removeEventListener('playing', this.onPlaying);
+          if (this.toggleButton && this.onToggle) this.toggleButton.removeEventListener('click', this.onToggle);
+        }
+
+        toggle() {
+          if (this.video.paused) {
+            this.video.play();
+            this.markPaused(false);
+          } else {
+            this.video.pause();
+            this.markPaused(true);
+          }
+        }
+
+        markPaused(paused) {
+          this.toggleAttribute('data-paused', paused);
+          if (this.toggleButton) {
+            this.toggleButton.setAttribute('aria-label', paused ? this.dataset.labelPlay : this.dataset.labelPause);
+          }
+        }
+      });
+    }
+  </script>
+{%- endif -%}
 {% schema %}
 {
   "name": "Hero Banner",
   "settings": [
     { "type": "image_picker", "id": "image", "label": "Desktop image" },
     { "type": "image_picker", "id": "mobile_image", "label": "Mobile image" },
+    { "type": "video", "id": "video", "label": "Hintergrund-Video", "info": "Ersetzt das Bild. Läuft stumm in Schleife mit Pause-Button. Bei „Bewegung reduzieren“ oder Datensparmodus wird das Vorschaubild gezeigt." },
+    { "type": "video", "id": "mobile_video", "label": "Hintergrund-Video mobil (optional)", "info": "Hochformat-Video für Smartphones. Leer lassen, um das Hauptvideo auch mobil zu zeigen." },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "Drop 0 — Live" },
     { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "KITETZU" },
     { "type": "text", "id": "heading_line_2", "label": "Heading line 2 (outline)", "default": "AUS TINTE GESCHMIEDET." },

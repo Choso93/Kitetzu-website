@@ -24,7 +24,8 @@
         "cta_secondary_label": "Alles entdecken",
         "cta_secondary_url": "/collections/all",
         "overlay_opacity": 70,
-        "min_height": 95
+        "min_height": 95,
+        "video": "shopify://files/videos/quer.mp4"
       }
     },
     "marquee_text": {
