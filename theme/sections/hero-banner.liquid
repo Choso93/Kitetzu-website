@@ -63,7 +63,7 @@
   .hero-dojo__slashline { position:absolute; top:0; left:0; right:0; height:2px; z-index:3; background:linear-gradient(90deg, var(--k-red), transparent 60%); transform-origin:left; animation:heroSlash 1.2s cubic-bezier(.19,1,.22,1) both .2s; }
   @media (min-width:900px) { .hero-dojo__vertical { display:block; } }
   @media (max-width:767px) { .hero-dojo__kanji { right:-4%; top:4%; } }
-  @media (prefers-reduced-motion:reduce) { .hero-dojo__kanji, .hero-dojo__content, .hero-dojo__ctas, .hero-dojo__slashline { animation:none; } .hero-dojo__video video, .hero-dojo__video-toggle { display:none; } .hero-dojo__video-toggle:active { transform:none; } }
+  @media (prefers-reduced-motion:reduce) { .hero-dojo__kanji, .hero-dojo__content, .hero-dojo__ctas, .hero-dojo__slashline { animation:none; } .hero-dojo__video video { transition:none; } .hero-dojo__video-toggle:active { transform:none; } }
 </style>
 <section class="hero-dojo">
   <div class="hero-dojo__slashline" aria-hidden="true"></div>
@@ -79,17 +79,14 @@
         {%- else -%}
           {{ hero_poster_video.preview_image | image_url: width: 1920 | image_tag: loading: 'eager', fetchpriority: 'high', alt: '', widths: '750, 1100, 1440, 1920', sizes: '100vw' }}
         {%- endif -%}
-        <video playsinline muted loop autoplay preload="none" aria-hidden="true" tabindex="-1">
+        <video playsinline muted loop preload="none" aria-hidden="true" tabindex="-1">
           {%- if hero_video != blank and hero_video_mobile != blank -%}
             {%- for video in hero_video_mobile.sources -%}
-              <source data-src="{{ video.url }}" type="{{ video.mime_type }}" media="(max-width: 767px)">
+              {%- if video.format == 'mp4' -%}
+                <source data-src="{{ video.url }}" type="{{ video.mime_type }}" data-media="(max-width: 767px)">
+              {%- endif -%}
             {%- endfor -%}
           {%- endif -%}
-          {%- for video in hero_video_main.sources -%}
-            {%- if video.format == 'm3u8' -%}
-              <source data-src="{{ video.url }}" type="{{ video.mime_type }}">
-            {%- endif -%}
-          {%- endfor -%}
           {%- for video in hero_video_main.sources -%}
             {%- if video.format == 'mp4' -%}
               <source data-src="{{ video.url }}" type="{{ video.mime_type }}">
@@ -135,20 +132,36 @@
           this.video = this.querySelector('video');
           this.toggleButton = this.querySelector('.hero-dojo__video-toggle');
           if (!this.video) return;
-          const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          const saveData = navigator.connection && navigator.connection.saveData;
-          if (reducedMotion || saveData) {
-            this.setAttribute('data-static', '');
-            return;
-          }
           this.onPlaying = () => this.setAttribute('data-playing', '');
           this.onToggle = () => this.toggle();
           this.video.addEventListener('playing', this.onPlaying);
           if (this.toggleButton) this.toggleButton.addEventListener('click', this.onToggle);
-          for (const source of this.video.querySelectorAll('source[data-src]')) {
-            source.src = source.dataset.src;
+          const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const saveData = navigator.connection && navigator.connection.saveData;
+          if (reducedMotion || saveData) {
+            this.markPaused(true);
+            return;
           }
-          this.video.load();
+          this.start();
+        }
+
+        start() {
+          if (!this.loaded) {
+            this.loaded = true;
+            const sources = Array.from(this.video.querySelectorAll('source[data-src]'));
+            const matching = sources.filter((source) => source.dataset.media && window.matchMedia(source.dataset.media).matches);
+            const chosen = matching.length ? matching : sources.filter((source) => !source.dataset.media);
+            for (const source of sources) {
+              if (chosen.includes(source)) source.src = source.dataset.src;
+              else source.remove();
+            }
+            if (!chosen.length) {
+              this.setAttribute('data-static', '');
+              return;
+            }
+            chosen[chosen.length - 1].addEventListener('error', () => this.setAttribute('data-static', ''), { once: true });
+            this.video.load();
+          }
           const playback = this.video.play();
           if (playback) playback.catch(() => this.markPaused(true));
         }
@@ -160,7 +173,7 @@
 
         toggle() {
           if (this.video.paused) {
-            this.video.play();
+            this.start();
             this.markPaused(false);
           } else {
             this.video.pause();
@@ -184,7 +197,7 @@
   "settings": [
     { "type": "image_picker", "id": "image", "label": "Desktop image" },
     { "type": "image_picker", "id": "mobile_image", "label": "Mobile image" },
-    { "type": "video", "id": "video", "label": "Hintergrund-Video", "info": "Ersetzt das Bild. Läuft stumm in Schleife mit Pause-Button. Bei „Bewegung reduzieren“ oder Datensparmodus wird das Vorschaubild gezeigt." },
+    { "type": "video", "id": "video", "label": "Hintergrund-Video", "info": "Ersetzt das Bild. Läuft stumm in Schleife mit Pause-Button. Bei „Bewegung reduzieren“ oder Datensparmodus startet es erst per Play-Button, bis dahin steht das Foto." },
     { "type": "video", "id": "mobile_video", "label": "Hintergrund-Video mobil (optional)", "info": "Hochformat-Video für Smartphones. Leer lassen, um das Hauptvideo auch mobil zu zeigen." },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "Drop 0 — Live" },
     { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "KITETZU" },
