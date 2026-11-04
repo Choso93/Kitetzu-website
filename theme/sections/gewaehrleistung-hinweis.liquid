@@ -1,0 +1,94 @@
+{% comment %}
+  KITETZU · Gesetzlicher Gewährleistungshinweis (EU-Label)
+  Link öffnet ein Modal-Fenster mit dem harmonisierten Hinweis. Schließen per X-Button, Klick daneben oder Esc.
+{% endcomment %}
+{%- liquid
+  assign skip = false
+  if section.settings.skip_on_product_cart and template.name == 'product'
+    assign skip = true
+  endif
+  if section.settings.skip_on_product_cart and template.name == 'cart'
+    assign skip = true
+  endif
+-%}
+{%- unless skip -%}
+<style>
+  .gw-note { border-top:1px solid rgba(20,20,22,.1); border-bottom:1px solid rgba(20,20,22,.1); background:var(--k-ink,#fff); }
+  .gw-note__inner { max-width:1440px; margin:0 auto; padding:14px 24px; display:flex; justify-content:{{ section.settings.align }}; }
+  .gw-note__trigger { appearance:none; background:none; border:0; padding:6px 0; margin:0; display:inline-flex; align-items:center; gap:10px; cursor:pointer; font-family:var(--k-font-body,inherit); font-size:13px; letter-spacing:.04em; color:var(--k-bone,#141416); text-align:left; }
+  .gw-note__trigger span { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
+  .gw-note__trigger:hover span { color:var(--k-red,#e63322); }
+  .gw-note__trigger:focus-visible, .gw-dialog__close:focus-visible, .gw-dialog__link:focus-visible { outline:2px solid var(--k-red,#e63322); outline-offset:3px; }
+  .gw-dialog { padding:0; border:0; background:transparent; max-width:none; max-height:none; width:100%; height:100%; overflow:auto; }
+  .gw-dialog:not([open]) { display:none; }
+  .gw-dialog::backdrop { background:rgba(20,20,22,.6); }
+  .gw-dialog__wrap { min-height:100%; display:flex; align-items:center; justify-content:center; padding:20px; box-sizing:border-box; }
+  .gw-dialog__panel { position:relative; width:min(100%,560px); max-height:calc(100vh - 40px); overflow:auto; background:#fff; padding:32px 28px 28px; box-sizing:border-box; }
+  .gw-dialog__close { position:absolute; top:10px; right:10px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:none; border:0; cursor:pointer; color:var(--k-bone,#141416); }
+  .gw-dialog__close:hover { color:var(--k-red,#e63322); }
+  .gw-dialog__title { font-family:var(--k-font-display,inherit); font-size:34px; line-height:1; letter-spacing:.03em; text-transform:uppercase; margin:0 40px 14px 0; color:var(--k-bone,#141416); }
+  .gw-dialog__text { font-size:14px; line-height:1.65; margin:0 0 20px; color:var(--k-bone-70,#4a4a4f); }
+  .gw-dialog__img { display:block; width:auto; max-width:100%; max-height:62vh; height:auto; margin:0 auto 20px; }
+  .gw-dialog__link { display:inline-block; font-size:13px; font-weight:600; letter-spacing:.06em; color:var(--k-bone,#141416); text-decoration:underline; text-underline-offset:3px; }
+  .gw-dialog__link:hover { color:var(--k-red,#e63322); }
+  body:has(dialog.gw-dialog[open]) { overflow:hidden; }
+</style>
+<div class="gw-note" {{ section.shopify_attributes }}>
+  <div class="gw-note__inner">
+    <button type="button" class="gw-note__trigger" data-gw-open aria-haspopup="dialog" aria-controls="gw-dialog-{{ section.id }}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"></path><path d="M8.5 12l2.5 2.5 4.5-5"></path></svg>
+      <span>{{ section.settings.trigger_label }}</span>
+    </button>
+  </div>
+  <dialog id="gw-dialog-{{ section.id }}" class="gw-dialog" aria-labelledby="gw-title-{{ section.id }}">
+    <div class="gw-dialog__wrap" data-gw-backdrop>
+      <div class="gw-dialog__panel">
+        <button type="button" class="gw-dialog__close" data-gw-close aria-label="Schließen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+        </button>
+        <h2 class="gw-dialog__title" id="gw-title-{{ section.id }}">{{ section.settings.dialog_title }}</h2>
+        {%- if section.settings.dialog_text != blank -%}<p class="gw-dialog__text">{{ section.settings.dialog_text }}</p>{%- endif -%}
+        {%- if section.settings.label_image != blank -%}
+          {{ section.settings.label_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 825, 1100', sizes: '(min-width: 600px) 504px, 92vw', alt: section.settings.label_alt, class: 'gw-dialog__img' }}
+        {%- endif -%}
+        {%- if section.settings.eu_url != blank -%}
+          <a class="gw-dialog__link" href="{{ section.settings.eu_url }}" target="_blank" rel="noopener">{{ section.settings.eu_link_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </dialog>
+  <script>
+    (function () {
+      var root = document.currentScript.parentElement;
+      var dlg = root.querySelector('dialog');
+      var openBtn = root.querySelector('[data-gw-open]');
+      if (!dlg || !openBtn) return;
+      openBtn.addEventListener('click', function () {
+        if (typeof dlg.showModal === 'function') { dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+      });
+      function close() { if (typeof dlg.close === 'function') { dlg.close(); } else { dlg.removeAttribute('open'); } }
+      dlg.querySelectorAll('[data-gw-close]').forEach(function (b) { b.addEventListener('click', close); });
+      dlg.addEventListener('click', function (e) { if (e.target === dlg || e.target.hasAttribute('data-gw-backdrop')) close(); });
+    })();
+  </script>
+</div>
+{%- endunless -%}
+{% schema %}
+{
+  "name": "Gewährleistungshinweis",
+  "settings": [
+    { "type": "text", "id": "trigger_label", "label": "Link-Text", "default": "Gesetzliche Gewährleistung – deine Rechte ansehen" },
+    { "type": "select", "id": "align", "label": "Ausrichtung", "options": [ { "value": "flex-start", "label": "Links" }, { "value": "center", "label": "Mitte" }, { "value": "flex-end", "label": "Rechts" } ], "default": "flex-start" },
+    { "type": "header", "content": "Modal-Fenster" },
+    { "type": "text", "id": "dialog_title", "label": "Überschrift", "default": "Gesetzliche Gewährleistung" },
+    { "type": "textarea", "id": "dialog_text", "label": "Text", "default": "Für alle bei uns gekauften Waren gilt in der EU die gesetzliche Gewährleistung von mindestens zwei Jahren." },
+    { "type": "image_picker", "id": "label_image", "label": "Offizielles EU-Label", "info": "Harmonisierter Hinweis nach Durchführungsverordnung (EU) 2025/1960." },
+    { "type": "text", "id": "label_alt", "label": "Alt-Text des Labels", "default": "Harmonisierter EU-Hinweis zur gesetzlichen Gewährleistung" },
+    { "type": "text", "id": "eu_url", "label": "Link zur EU-Seite", "default": "https://europa.eu/youreurope/business/selling-in-eu/consumer-contracts-guarantees/eu-legal-guarantee-notice-and-garan-label/", "info": "Bitte mit dem Ziel des QR-Codes auf dem Label abgleichen." },
+    { "type": "text", "id": "eu_link_label", "label": "Link-Beschriftung", "default": "Mehr Informationen der Europäischen Union" },
+    { "type": "header", "content": "Anzeige" },
+    { "type": "checkbox", "id": "skip_on_product_cart", "label": "Auf Produkt- und Warenkorbseite ausblenden", "info": "Für die Footer-Version, damit der Hinweis dort nicht doppelt erscheint.", "default": false }
+  ],
+  "presets": [{ "name": "Gewährleistungshinweis" }]
+}
+{% endschema %}
