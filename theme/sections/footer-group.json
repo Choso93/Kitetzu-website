@@ -37,12 +37,21 @@
             "heading": "Hilfe & Service",
             "menu": "footer-hilfe"
           }
+        },
+        "withdrawal_button": {
+          "type": "withdrawal_button",
+          "settings": {
+            "heading": "Widerruf",
+            "label": "Vertrag widerrufen",
+            "link": "shopify://pages/vertrag-widerrufen"
+          }
         }
       },
       "block_order": [
         "brand_block_1",
         "link_list_shop",
-        "link_list_hilfe"
+        "link_list_hilfe",
+        "withdrawal_button"
       ],
       "settings": {
         "seo_logo": "shopify://shop_images/Kitetsu_Logo_black_e5ca8fd0-359a-49cf-8825-4d255cb8ddc8.png",
