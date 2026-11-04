@@ -55,6 +55,7 @@
   .hero-dojo__content { position:relative; z-index:2; padding:40px 24px 30px; max-width:1440px; margin:0 auto; width:100%; animation:heroFadeUp .9s ease both .1s; }
   .hero-dojo__heading { font-family:var(--k-font-display); font-size:clamp(84px,22vw,210px); line-height:.86; letter-spacing:.015em; color:var(--k-bone); margin:14px 0 0; text-wrap:balance; }
   .hero-dojo__ghostline { display:block; font-family:var(--k-font-display); font-size:clamp(46px,11vw,120px); line-height:.92; letter-spacing:.03em; color:transparent; -webkit-text-stroke:1.5px rgba(20,20,22,.4); margin:6px 0 34px; }
+  .hero-dojo__sub { font-family:var(--k-font-body); font-size:clamp(13px,1.9vw,19px); font-weight:500; letter-spacing:.28em; text-transform:uppercase; line-height:1.4; color:var(--k-bone); margin:-14px 0 34px; text-wrap:balance; }
   .hero-dojo__ctas { display:flex; gap:18px; align-items:center; flex-wrap:wrap; animation:heroFadeUp .9s ease both .35s; }
   .hero-dojo__vertical { position:absolute; right:22px; bottom:120px; z-index:2; display:none; }
   .hero-dojo__meta { position:relative; z-index:2; border-top:1px solid var(--k-line); margin-top:34px; }
@@ -110,6 +111,7 @@
   <div class="hero-dojo__content">
     {%- if section.settings.eyebrow != blank -%}<p class="k-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
     {%- if section.settings.heading_line_1 != blank -%}<h1 class="hero-dojo__heading">{{ section.settings.heading_line_1 }}{%- if section.settings.heading_line_2 != blank %} <span class="hero-dojo__ghostline">{{ section.settings.heading_line_2 }}</span>{%- endif -%}</h1>{%- elsif section.settings.heading_line_2 != blank -%}<h1 class="hero-dojo__ghostline">{{ section.settings.heading_line_2 }}</h1>{%- endif -%}
+    {%- if section.settings.subheading != blank -%}<p class="hero-dojo__sub">{{ section.settings.subheading }}</p>{%- endif -%}
     <div class="hero-dojo__ctas">
       {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}<a href="{{ section.settings.cta_url }}" class="k-btn k-btn--red">{{ section.settings.cta_label }}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>{%- endif -%}
       {%- if section.settings.cta_secondary_label != blank and section.settings.cta_secondary_url != blank -%}<a href="{{ section.settings.cta_secondary_url }}" class="k-link">{{ section.settings.cta_secondary_label }}</a>{%- endif -%}
@@ -202,6 +204,7 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "ARC 01 — Live" },
     { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "KITETZU" },
     { "type": "text", "id": "heading_line_2", "label": "Heading line 2 (outline)", "default": "AUS TINTE GESCHMIEDET." },
+    { "type": "text", "id": "subheading", "label": "Absatz unter Heading line 2", "default": "ANIME INSPIRED STREETWEAR" },
     { "type": "text", "id": "kanji", "label": "Ghost-Kanji", "default": "鬼徹", "info": "Großes Kanji-Wasserzeichen rechts" },
     { "type": "text", "id": "vertical_text", "label": "Vertikaler Text (japanisch)", "default": "限定・百着" },
     { "type": "text", "id": "meta_text", "label": "Meta-Zeile (mit · trennen)", "default": "100 Stück · Kein Restock · Reflektierende Prints · 280 GSM" },

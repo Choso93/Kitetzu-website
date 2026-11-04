@@ -1,0 +1,38 @@
+{% comment %}
+  KITETZU · Marquee — Lauftext mit Outline-Wechsel
+  Die Gruppe wird zweimal ausgegeben und um genau 50 % verschoben: nahtlose Endlosschleife.
+{% endcomment %}
+<style>
+  @keyframes marquee { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+  .marquee-section { overflow:hidden; border-top:1px solid rgba(230,51,34,.5); border-bottom:1px solid rgba(230,51,34,.5); position:relative; }
+  .marquee__track { display:flex; width:max-content; white-space:nowrap; animation:marquee {{ section.settings.speed_seconds }}s linear infinite; will-change:transform; }
+  .marquee__group { display:flex; flex-shrink:0; }
+  .marquee__item { font-family:var(--k-font-display); font-size:clamp(42px,8vw,58px); letter-spacing:.07em; padding-right:28px; }
+  .marquee__item--outline { color:transparent; -webkit-text-stroke:1.2px {{ section.settings.text_color }}; }
+  .marquee-section:hover .marquee__track { animation-play-state:paused; }
+  @media (prefers-reduced-motion:reduce) { .marquee__track { animation-duration:{{ section.settings.speed_seconds | times: 3 }}s; } }
+</style>
+<section class="marquee-section" style="background:{{ section.settings.bg_color }};padding:16px 0;color:{{ section.settings.text_color }};">
+  <div class="marquee__track" aria-hidden="true">
+    <div class="marquee__group">
+      <span class="marquee__item">{{ section.settings.text }}</span>
+      <span class="marquee__item marquee__item--outline">{{ section.settings.text }}</span>
+    </div>
+    <div class="marquee__group">
+      <span class="marquee__item">{{ section.settings.text }}</span>
+      <span class="marquee__item marquee__item--outline">{{ section.settings.text }}</span>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Marquee Text",
+  "settings": [
+    { "type": "textarea", "id": "text", "label": "Marquee text", "default": "KITETZU ・ 鬼徹 ・ ANIME FITS ・ KEIN RESTOCK ・ OVERSIZE ・ 280 GSM ・ AUS TINTE GESCHMIEDET ・ " },
+    { "type": "range", "id": "speed_seconds", "label": "Scroll speed (seconds)", "min": 6, "max": 60, "step": 1, "default": 32 },
+    { "type": "color", "id": "bg_color", "label": "Background color", "default": "#0a0a0b" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#f2efe8" }
+  ],
+  "presets": [{ "name": "Marquee Text" }]
+}
+{% endschema %}
