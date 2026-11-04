@@ -13,6 +13,7 @@
   .site-header__icon-btn { background: none; border: none; cursor: pointer; color: #0d0d0d; line-height: 0; padding: 4px; }
   .site-header__icon-link { line-height: 0; color: #0d0d0d; padding: 4px; position: relative; }
   .site-header__cart-count { position: absolute; top: -5px; right: -5px; background: oklch(0.62 0.27 350); color: #fff; font-size: 8.5px; font-weight: 600; width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; }
+  .site-header__cart-count[hidden] { display: none; }
 </style>
 
 <header class="site-header">
@@ -40,7 +41,7 @@
       </a>
       <a href="{{ routes.cart_url }}" class="site-header__icon-link" aria-label="Warenkorb">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-        {%- if cart.item_count > 0 -%}<span class="site-header__cart-count">{{ cart.item_count }}</span>{%- endif -%}
+        <span class="site-header__cart-count" data-cart-count aria-live="polite"{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
       </a>
     </div>
   </div>
@@ -59,6 +60,40 @@
   var btn=document.querySelector('.site-header__menu-btn'),nav=document.getElementById('main-nav');
   if(!btn||!nav)return;
   btn.addEventListener('click',function(){var open=nav.style.display!=='none';nav.style.display=open?'none':'block';btn.setAttribute('aria-expanded',String(!open));});
+})();
+</script>
+<script>
+/* Warenkorb-Zähler in Echtzeit: aktualisiert sich nach jedem Hinzufügen/Ändern, ohne Seite neu zu laden */
+(function(){
+  if(window.__kitetzuCartCount)return;
+  window.__kitetzuCartCount=true;
+  function setCount(n){
+    n=parseInt(n,10)||0;
+    document.querySelectorAll('[data-cart-count]').forEach(function(el){
+      el.textContent=n>99?'99+':String(n);
+      if(n>0){el.removeAttribute('hidden');}else{el.setAttribute('hidden','');}
+    });
+  }
+  function refresh(){
+    fetch('{{ routes.cart_url }}.js',{headers:{'Accept':'application/json'},credentials:'same-origin',cache:'no-store'})
+      .then(function(r){return r.json();})
+      .then(function(c){setCount(c.item_count);})
+      .catch(function(){});
+  }
+  var nativeFetch=window.fetch;
+  if(nativeFetch){
+    window.fetch=function(input){
+      var url=typeof input==='string'?input:(input&&input.url)||'';
+      var result=nativeFetch.apply(this,arguments);
+      if(/\/cart\/(add|change|update|clear)/.test(url)){result.then(refresh,function(){});}
+      return result;
+    };
+  }
+  document.addEventListener('cart:update',function(e){
+    var n=e&&e.detail&&e.detail.data&&e.detail.data.itemCount;
+    if(typeof n==='number'){setCount(n);}else{refresh();}
+  });
+  window.addEventListener('pageshow',function(e){if(e.persisted){refresh();}});
 })();
 </script>
 
