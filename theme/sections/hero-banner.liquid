@@ -66,7 +66,7 @@
   .hero-dojo__meta-inner { max-width:1440px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.7); }
   .hero-dojo__meta-inner .dot { width:4px; height:4px; background:var(--k-red); transform:rotate(45deg); flex-shrink:0; }
   .hero-dojo__slashline { position:absolute; top:0; left:0; right:0; height:2px; z-index:3; background:linear-gradient(90deg, var(--k-red), transparent 60%); transform-origin:left; animation:heroSlash 1.2s cubic-bezier(.19,1,.22,1) both .2s; }
-  @media (min-width:900px) { .hero-dojo__vertical { display:block; } }
+  @media (min-width:900px) { .hero-dojo__vertical { display:block; } .hero-dojo__ghostline { font-size:clamp(46px,10vw,108px); } }
   @media (max-width:767px) { .hero-dojo__kanji { right:-4%; top:4%; } }
   @media (prefers-reduced-motion:reduce) { .hero-dojo__kanji, .hero-dojo__content, .hero-dojo__ctas, .hero-dojo__slashline { animation:none; } .hero-dojo__video video { transition:none; } .hero-dojo__video-toggle:active { transform:none; } }
 </style>
