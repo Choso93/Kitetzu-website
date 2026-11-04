@@ -48,7 +48,7 @@
 <section class="drop-zone">
   <div class="drop-panel drop-panel--clickable">
     {%- if drop_col != blank -%}<a href="{{ drop_col.url }}" class="drop-panel__link" aria-label="{{ section.settings.current_title }}"></a>{%- endif -%}
-    <div class="drop-panel__sys"><span>SYS / {{ section.settings.current_label | default: 'DROP 0' | escape }}</span><span class="drop-panel__live">Live</span></div>
+    <div class="drop-panel__sys"><span>SYS / {{ section.settings.current_label | default: 'ARC 01' | escape }}</span><span class="drop-panel__live">Live</span></div>
     <h2 class="drop-panel__title">{{ section.settings.current_title }}</h2>
     <p class="drop-panel__sub">{{ section.settings.current_sub }}</p>
     <div class="drop-meter">
@@ -98,8 +98,8 @@
   "name": "KITETZU Drop-Zone",
   "settings": [
     { "type": "header", "content": "Aktueller Drop" },
-    { "type": "text", "id": "current_label", "label": "System-Label", "default": "DROP 0" },
-    { "type": "text", "id": "current_title", "label": "Titel", "default": "DROP 0 — WINDBREAKER" },
+    { "type": "text", "id": "current_label", "label": "System-Label", "default": "ARC 01" },
+    { "type": "text", "id": "current_title", "label": "Titel", "default": "ARC 01 — WINDBREAKER" },
     { "type": "text", "id": "current_sub", "label": "Unterzeile", "default": "Onyx & Ghost. Reflektierende Panels. Limitiert auf 100 Stück — danach nie wieder." },
     { "type": "collection", "id": "collection", "label": "Drop-Collection" },
     { "type": "range", "id": "stock_limit", "label": "Auflage (Stück)", "min": 10, "max": 500, "step": 10, "default": 100 },

@@ -31,7 +31,7 @@
         "announcement_drop0": {
           "type": "_announcement",
           "settings": {
-            "text": "Drop 0 live · Limitiert · Kein Restock",
+            "text": "ARC 01 live · Limitiert · Kein Restock",
             "link": "shopify://collections/windbreaker",
             "font": "var(--font-heading--family)",
             "font_size": "0.875rem",
@@ -84,7 +84,7 @@
         "nav_link_eyMPNE": {
           "type": "nav_link",
           "settings": {
-            "label": "DROP 0 — WINDBREAKER",
+            "label": "ARC 01 — WINDBREAKER",
             "url": "shopify://collections/windbreaker"
           }
         },

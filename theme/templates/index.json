@@ -13,13 +13,13 @@
       "type": "hero-banner",
       "settings": {
         "image": "shopify://shop_images/DSC00123_Buegeln.jpg",
-        "eyebrow": "Drop 0 — Live",
+        "eyebrow": "ARC 01 — Live",
         "heading_line_1": "KITETZU.",
         "heading_line_2": "ANIME FITS.",
         "kanji": "",
         "vertical_text": "",
         "meta_text": "",
-        "cta_label": "Drop 0 ansehen",
+        "cta_label": "ARC 01 ansehen",
         "cta_url": "/collections/windbreaker",
         "cta_secondary_label": "Alles entdecken",
         "cta_secondary_url": "/collections/all",
@@ -42,8 +42,8 @@
       "type": "kitetzu-drop-zone",
       "disabled": true,
       "settings": {
-        "current_label": "DROP 0",
-        "current_title": "DROP 0 — WINDBREAKER",
+        "current_label": "ARC 01",
+        "current_title": "ARC 01 — WINDBREAKER",
         "current_sub": "Onyx & Ghost. Reflektierende Panels. Limitiert auf 200 Stück — danach nie wieder.",
         "collection": "windbreaker",
         "stock_limit": 200,
@@ -83,7 +83,7 @@
           "type": "collection_block",
           "settings": {
             "collection": "windbreaker",
-            "custom_label": "DROP 0 · WINDBREAKER"
+            "custom_label": "ARC 01 · WINDBREAKER"
           }
         },
         "col_3": {
@@ -138,7 +138,7 @@
           "settings": {
             "icon": "sword",
             "title": "Limitierte Drops",
-            "text": "Einmal weg, für immer weg. Drop 0: nur 200 Stück."
+            "text": "Einmal weg, für immer weg. ARC 01: nur 200 Stück."
           }
         }
       },
